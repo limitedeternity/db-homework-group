@@ -1,0 +1,10 @@
+﻿cradle:
+  cabal:
+    - path: "src/"
+      component: "lib:groupby"
+
+    - path: "app/"
+      component: "groupby:exe:groupby-exe"
+
+    - path: "test/"
+      component: "groupby:test:groupby-test"
