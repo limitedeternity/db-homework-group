@@ -2,7 +2,12 @@ name:                groupby
 version:             0.1.0.0
 dependencies:
 - base >= 4.7 && < 5
-- csv-conduit == 0.7.3.0
+- optparse-applicative
+- csv-conduit
+- conduit
+- text
+- transformers
+- containers
 
 ghc-options:
 - -Wall
@@ -28,6 +33,7 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - groupby
+    - pretty-show
     when:
       - condition: false
         other-modules: Paths_groupby
@@ -42,3 +48,4 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - groupby
+    - hspec
