@@ -4,11 +4,12 @@ module Main (main) where
 
 import Lib
 import Control.Exception
+import Data.Functor
 import Text.Printf
 
 import Control.Monad.Trans.Reader
 import Options.Applicative
-import Text.Show.Pretty (pPrint)
+import Text.Show.Pretty
 import Conduit
 import Data.CSV.Conduit
 import qualified Data.Conduit.List as CL
@@ -28,8 +29,8 @@ data CLIArgs = CLIArgs
 cliArgsParser :: Parser CLIArgs
 cliArgsParser = CLIArgs
     <$> argument str (metavar "CSV_FILE_PATH" <> help "Path to CSV file")
-    <*> argument auto (metavar "GROUP_BY_COLUMN" <> help "Number of column to group by")
-    <*> argument auto (metavar "AGGREGATION_COLUMN" <> help "Number of column to perform aggregation on")
+    <*> (argument auto (metavar "GROUP_BY_COLUMN" <> help "Number of column to group by") <&> (\n -> n - 1))
+    <*> (argument auto (metavar "AGGREGATION_COLUMN" <> help "Number of column to perform aggregation on") <&> (\n -> n - 1))
     <*> argument str (metavar "AGGREGATION_FUNCTION" <> help "Aggregation function (max, min, sum, count)")
 
 parseCLIArgs :: IO CLIArgs
