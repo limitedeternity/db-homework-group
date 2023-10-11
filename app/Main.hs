@@ -47,7 +47,7 @@ prepareCSVRow row = do
         } <- ask
 
     case aggregationFunction of
-      "count" -> return (row !! groupByColumn, 1.0)
+      "count" -> return (row !! groupByColumn, 0 / 0)
       _       -> return (row !! groupByColumn, parseDouble $ row !! aggregationColumn)
           where
               parseDouble aggRow = either (const $ raiseTypeError aggRow) fst . TR.double $ aggRow
