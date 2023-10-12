@@ -3,6 +3,7 @@ import Control.Exception
 
 import Conduit
 import Test.Hspec
+import qualified Data.Conduit.Combinators as CC
 import qualified Data.Text as T
 import qualified Data.Map as Map
 
@@ -16,13 +17,13 @@ main = hspec $ do
     it "returns maximum values when given 'max'" $ do
         result <- runConduit $
             yieldMany
-             [  (,) (T.pack "Key1") 1
-              , (,) (T.pack "Key2") 5
-              , (,) (T.pack "Key1") 3
-              , (,) (T.pack "Key2") 2
-              , (,) (T.pack "Key1") 4
+             [  (,) (T.pack "Key1") (1 :: Double)
+              , (,) (T.pack "Key2") (5 :: Double)
+              , (,) (T.pack "Key1") (3 :: Double)
+              , (,) (T.pack "Key2") (2 :: Double)
+              , (,) (T.pack "Key1") (4 :: Double)
              ]
-            .| getAggregate "max"
+            .| CC.foldl (getFoldAggregate "max") Map.empty
 
         Map.lookup (T.pack "Key1") result `shouldBe` Just 4
         Map.lookup (T.pack "Key2") result `shouldBe` Just 5
@@ -30,13 +31,13 @@ main = hspec $ do
     it "returns minimum values when given 'min'" $ do
         result <- runConduit $
             yieldMany
-             [  (,) (T.pack "Key1") 1
-              , (,) (T.pack "Key2") 5
-              , (,) (T.pack "Key1") 3
-              , (,) (T.pack "Key2") 2
-              , (,) (T.pack "Key1") 4
+             [  (,) (T.pack "Key1") (1 :: Double)
+              , (,) (T.pack "Key2") (5 :: Double)
+              , (,) (T.pack "Key1") (3 :: Double)
+              , (,) (T.pack "Key2") (2 :: Double)
+              , (,) (T.pack "Key1") (4 :: Double)
              ]
-            .| getAggregate "min"
+            .| CC.foldl (getFoldAggregate "min") Map.empty
 
         Map.lookup (T.pack "Key1") result `shouldBe` Just 1
         Map.lookup (T.pack "Key2") result `shouldBe` Just 2
@@ -44,13 +45,13 @@ main = hspec $ do
     it "returns sums of values when given 'sum'" $ do
         result <- runConduit $
             yieldMany
-             [  (,) (T.pack "Key1") 1
-              , (,) (T.pack "Key2") 5
-              , (,) (T.pack "Key1") 3
-              , (,) (T.pack "Key2") 2
-              , (,) (T.pack "Key1") 4
+             [  (,) (T.pack "Key1") (1 :: Double)
+              , (,) (T.pack "Key2") (5 :: Double)
+              , (,) (T.pack "Key1") (3 :: Double)
+              , (,) (T.pack "Key2") (2 :: Double)
+              , (,) (T.pack "Key1") (4 :: Double)
              ]
-            .| getAggregate "sum"
+            .| CC.foldl (getFoldAggregate "sum") Map.empty
 
         Map.lookup (T.pack "Key1") result `shouldBe` Just 8
         Map.lookup (T.pack "Key2") result `shouldBe` Just 7
@@ -58,25 +59,25 @@ main = hspec $ do
     it "returns amounts of values when given 'count'" $ do
         result <- runConduit $
             yieldMany
-             [  (,) (T.pack "Key1") 1
-              , (,) (T.pack "Key2") 5
-              , (,) (T.pack "Key1") 3
-              , (,) (T.pack "Key2") 2
-              , (,) (T.pack "Key1") 4
+             [  (,) (T.pack "Key1") (1 :: Double)
+              , (,) (T.pack "Key2") (5 :: Double)
+              , (,) (T.pack "Key1") (3 :: Double)
+              , (,) (T.pack "Key2") (2 :: Double)
+              , (,) (T.pack "Key1") (4 :: Double)
              ]
-            .| getAggregate "count"
+            .| CC.foldl (getFoldAggregate "count") Map.empty
 
         Map.lookup (T.pack "Key1") result `shouldBe` Just 3
         Map.lookup (T.pack "Key2") result `shouldBe` Just 2
 
     it "throws an error when given an invalid aggregation function" $
         let action = evaluate $ runConduitPure $ yieldMany [
-                (,) (T.pack "Key1") 1
-              , (,) (T.pack "Key2") 5
-              , (,) (T.pack "Key1") 3
-              , (,) (T.pack "Key2") 2
-              , (,) (T.pack "Key1") 4
+                (,) (T.pack "Key1") (1 :: Double)
+              , (,) (T.pack "Key2") (5 :: Double)
+              , (,) (T.pack "Key1") (3 :: Double)
+              , (,) (T.pack "Key2") (2 :: Double)
+              , (,) (T.pack "Key1") (4 :: Double)
              ]
-             .| getAggregate "invalid"
+             .| CC.foldl (getFoldAggregate "invalid") Map.empty
         in
         action `shouldThrow` anyPatternMatchFail

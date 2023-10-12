@@ -3,13 +3,19 @@ version:             0.1.0.0
 dependencies:
 - base >= 4.7 && < 5
 - optparse-applicative
-- csv-conduit
 - conduit
+- csv-conduit
+- conduit-algorithms
 - text
+- temporary
+- directory
+- filepath
 - transformers
 - containers
 
 ghc-options:
+- -O2
+- -fno-full-laziness
 - -Wall
 - -Wcompat
 - -Widentities
@@ -33,7 +39,6 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - groupby
-    - pretty-show
     when:
       - condition: false
         other-modules: Paths_groupby
