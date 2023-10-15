@@ -49,7 +49,7 @@ parseCLIArgs = execParser $ info (cliArgsParser <**> helper) fullDesc
             aggregationFunction <- argument str (metavar "AGGREGATION_FUNCTION" <> help "Aggregation function (max, min, sum, count)")
 
             return $ CLIArgs
-                csvPath
+                (normalise csvPath)
                 (groupByColumn - 1)
                 (aggregationColumn - 1)
                 aggregationFunction
@@ -185,7 +185,7 @@ main = do
         .| CC.take 1
         .| fromCSV defCSVSettings
         .| CC.decodeUtf8Lenient
-        .| do CC.line CC.lengthE
+        .| CC.line CC.lengthE
 
     let maxChunkSize = 500 * ((^) :: Int -> Int -> Int) 2 20 -- 500 MB
     let rowsPerChunk = maxChunkSize `div` headRowLength
