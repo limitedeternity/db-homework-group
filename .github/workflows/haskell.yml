@@ -1,5 +1,5 @@
-on: [push]
 name: build
+on: [push]
 jobs:
   build:
     name: groupby:exe:groupby-exe
@@ -12,5 +12,13 @@ jobs:
           cabal-version: 'latest'
           enable-stack: true
           stack-version: 'latest'
-      - run: stack build
+      - run: |
+          stack build
+          echo "artifactPath=$(stack path --local-install-root)/bin/*" >> $GITHUB_ENV
       - run: stack test
+      - uses: actions/upload-artifact@v3
+        with:
+          name: groupby-exe
+          path: ${{ env.artifactPath }}
+          if-no-files-found: error
+      - run: stack clean --full
