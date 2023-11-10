@@ -7,9 +7,9 @@
 
 Например: 
 
-```
-stack run data.csv 3 2 sum   # группируем по полю 3 и считаем сумму по колонке 2.
-```
+<big><pre>
+[stack](https://www.haskell.org/ghcup/install/) run data.csv 3 2 sum   # группируем по полю 3 и считаем сумму по колонке 2.
+</pre></big>
 
 ## Язык реализации и оформление
 
